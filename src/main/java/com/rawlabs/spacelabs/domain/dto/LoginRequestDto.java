@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequestDto {
 
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "user")
-    private String username;
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "johndhoe@mail.com")
+    private String email;
 
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "password")
+    @Schema(requiredMode =
+            Schema.RequiredMode.REQUIRED, example = "password")
     private String password;
 
 }

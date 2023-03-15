@@ -4,6 +4,8 @@ import com.rawlabs.spacelabs.component.TokenProvider;
 import com.rawlabs.spacelabs.domain.dao.User;
 import com.rawlabs.spacelabs.domain.dto.LoginRequestDto;
 import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
+import com.rawlabs.spacelabs.domain.dto.RegisterRequestDto;
+import com.rawlabs.spacelabs.domain.dto.RegisterResponseDto;
 import com.rawlabs.spacelabs.exception.UnAuthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class AuthService {
 
     public LoginResponseDto doLogin(LoginRequestDto request) {
         log.info("Begin do login with request :: {}", request);
-        User user = (User) userService.loadUserByUsername(request.getUsername());
+        User user = (User) userService.loadUserByUsername(request.getEmail());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnAuthorizedException("Invalid username or password!");
@@ -42,7 +44,7 @@ public class AuthService {
 
         log.info("Create authentication context");
         final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -53,5 +55,6 @@ public class AuthService {
                 .expiresIn(tokenProvider.getExpirationDate(token))
                 .build();
     }
+
 
 }

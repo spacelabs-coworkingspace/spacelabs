@@ -2,6 +2,7 @@ package com.rawlabs.spacelabs.controller;
 
 import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
 import com.rawlabs.spacelabs.service.AuthService;
+import com.rawlabs.spacelabs.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ class AuthControllerTest {
     @MockBean
     private AuthService authService;
 
+    @MockBean
+    private UserService userService;
+
     @Autowired
     private WebApplicationContext context;
 
@@ -52,8 +56,8 @@ class AuthControllerTest {
     @EnableWebMvc
     static class AuthControllerTestConfig {
         @Bean
-        public AuthController authController(AuthService authService) {
-            return new AuthController(authService);
+        public AuthController authController(AuthService authService, UserService userService) {
+            return new AuthController(authService, userService);
         }
     }
 
