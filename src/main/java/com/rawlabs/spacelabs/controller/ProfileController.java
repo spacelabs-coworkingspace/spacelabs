@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,8 +35,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    @JsonIgnore
-    public String getProfile(HttpServletRequest request){
+    public UserDetails getProfile(HttpServletRequest request){
         return userService.getProfile(request);
     }
 }

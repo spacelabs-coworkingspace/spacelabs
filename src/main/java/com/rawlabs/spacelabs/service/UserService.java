@@ -42,12 +42,17 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public String getProfile(HttpServletRequest request){
+    public UserDetails getProfile(HttpServletRequest request){
         log.info("Begin get profile :: {}", request);
         Principal principal = request.getUserPrincipal();
 
         log.info("get name from profile : " , principal.getName());
-        return principal.getName();
+        String username = principal.getName();
+
+        User user = userRepository.findUserByUsername(username);
+        log.info("Get user from username", user);
+
+        return user;
     }
 
     public RegisterResponseDto doRegister(RegisterRequestDto request) {
