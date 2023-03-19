@@ -1,0 +1,74 @@
+- name: Setup Instance for Deployment (RPM Linux Based) Playbooks
+  hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Updating server
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+        update_only: yes
+    - name: Remove package not needed anymore
+      yum:
+        autoremove: yes
+    - name: Removing any installed docker and python3
+      yum:
+        name:
+          - docker
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: absent    
+    - name: Installing docker engine and python3
+      yum:
+        name: '{{ item }}'
+        state: latest
+      with_items:
+        - python3
+        - python3-pip
+        - docker
+    - name: Install Docker SDK for Python
+      pip:
+        name: docker-py
+    - name: Add docker group
+      group:
+        name: docker
+        state: present
+    - name: Add $USER to docker group
+      user:
+        name: '{{ ansible_user }}'
+        groups: docker
+        append: yes
+    - name: Do a ssh reset in order to reflect the $USER group changes
+      meta: reset_connection
+    - name: Start docker service
+      systemd:
+        name: docker
+        state: started
+    - name: Check docker network exists
+      docker_network_info:
+        name: '{{default_docker_network}}'
+      register: docker_network_check
+    - name: Create docker network
+      docker_network:
+        name: '{{default_docker_network}}'
+      when: docker_network_check.exists == false
+    - name: Create PostgreSQL container
+      docker_container:
+        name: '{{postgres_constainer_name}}'
+        image: '{{postgres_image_name}}'
+        ports:
+          - "{{postgres_publish_port}}:5432"
+        env:
+          POSTGRES_PASSWORD: '{{postgres_db_password}}'
+          POSTGRES_DB: '{{postgres_db_name}}'
+          PGDATA: /var/lib/postgresql/data
+        volumes:
+          - ./postgresql/data:/var/lib/postgresql/data
+        networks:
+          - name: '{{default_docker_network}}'
