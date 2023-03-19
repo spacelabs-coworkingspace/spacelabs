@@ -38,46 +38,33 @@ public class TransactionService {
     }
 
     public TransactionResponseDto inquiry (TransactionRequestDto request){
-
-        log.info("Begin Get coworking space by id :: {}", request.getCoworkingSpaceId());
-        CoworkingSpace coworkingSpace = coworkingSpaceService.getById(request.getCoworkingSpaceId());
-        if(coworkingSpace == null){
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                log.error("Error get coworking space {}", e);
-                throw new SpaceLabsException("Error find payment : ", ErrorCode.DATA_NOT_FOUND.name());
-            }
-        }
-        log.info("Response get coworking space", coworkingSpace);
-
-
-        log.info("Begin Get payment method by id :: {}", request.getPaymentMethodId());
-        PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodById(request.getPaymentMethodId());
-        if(paymentMethod == null){
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                log.error("Error get paymnet method {}", e);
-                throw new SpaceLabsException("Error find payment : ", ErrorCode.DATA_NOT_FOUND.name());
-            }
-        }
-        log.info("Response Get payment method by id", paymentMethod);
-
         Guest guest;
-        try {
-            guest = guestService.saveGuest(request.getGuest());
-        } catch (Exception e){
-            log.error("Error save guest {}", e);
-            throw new SpaceLabsException("Error Register", ErrorCode.UNKNOWN_ERROR.name());
-        }
-        log.info("Response save gues", guest);
-
-        long duration = Duration.between(guest.getTimeStart(), guest.getTimeEnd()).toHours();
-        int total = (int) (coworkingSpace.getPrice() * duration);
-        log.info("Begin save transaction by guest");
         Transaction transaction;
         try {
+            log.info("Begin Get coworking space by id :: {}", request.getCoworkingSpaceId());
+            CoworkingSpace coworkingSpace = coworkingSpaceService.getById(request.getCoworkingSpaceId());
+            if(coworkingSpace == null){
+                throw new Exception();
+            }
+            log.info("Response get coworking space", coworkingSpace);
+
+            log.info("Begin Get payment method by id :: {}", request.getPaymentMethodId());
+            PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodById(request.getPaymentMethodId());
+            if(paymentMethod == null){
+                throw new Exception();
+            }
+            log.info("Response Get payment method by id", paymentMethod);
+
+
+            log.info("Begin save guest");
+            guest = guestService.saveGuest(request.getGuest());
+            log.info("Response save guest", guest);
+
+
+            long duration = Duration.between(guest.getTimeStart(), guest.getTimeEnd()).toHours();
+            int total = (int) (coworkingSpace.getPrice() * duration);
+            log.info("Begin save transaction by guest");
+
             transaction = transactionRepository.save(Transaction.builder()
                     .createdDate(LocalDateTime.now())
                     .isDeleted(Boolean.FALSE)
@@ -88,12 +75,13 @@ public class TransactionService {
                     .status("PENDING")
                     .build()
             );
-
             log.info("Save transaction response :: ", transaction);
+
         } catch (Exception e) {
-            log.error("Error save transaction", e);
-            throw new SpaceLabsException("Error save transaction", ErrorCode.UNKNOWN_ERROR.name());
+            log.error("Error get paymnet method {}", e);
+            throw new SpaceLabsException("Error :", ErrorCode.UNKNOWN_ERROR.name());
         }
+
 
         return TransactionResponseDto.builder()
                 .transactionId(transaction.getId())

@@ -10,5 +10,7 @@ import java.util.List;
 public interface CoworkingSpaceRepository extends JpaRepository<CoworkingSpace, Long> {
 
     List<CoworkingSpace> findCoworkingSpaceByAddressIgnoreCase(String address);
+    List<CoworkingSpace> findCoworkingSpaceByNameIgnoreCase(String name);
 
+    List<CoworkingSpace> findCoworkingSpaceByNameAndByAddressIgnoreCase(String name, String address);
 }

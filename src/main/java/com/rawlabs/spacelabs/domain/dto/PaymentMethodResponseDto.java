@@ -11,6 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentMethodResponseDto {
+
+    @Schema(
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "1"
+    )
+    private Long id;
     @Schema(
             requiredMode = Schema.RequiredMode.REQUIRED,
             example = "BCA"

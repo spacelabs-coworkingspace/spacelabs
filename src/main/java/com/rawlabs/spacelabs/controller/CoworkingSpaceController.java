@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
 
 @Slf4j
@@ -33,8 +32,8 @@ public class CoworkingSpaceController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    public List<CoworkingSpace> getAllCoworkingSpaces(@RequestParam(value = "address", required = false) String address){
-        return coworkingSpaceService.getCoworkingSpaceByAddress(address);
+    public List<CoworkingSpace> getCworkingSpaces(@RequestParam(value = "address", required = false) String address, @RequestParam(value = "name", required = false) String name){
+        return coworkingSpaceService.getCoworkingSpaces(address, name);
     }
 
 

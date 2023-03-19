@@ -3,8 +3,10 @@ package com.rawlabs.spacelabs.service;
 import com.rawlabs.spacelabs.domain.dao.CoworkingSpace;
 import com.rawlabs.spacelabs.repository.CoworkingSpaceRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +21,6 @@ public class CoworkingSpaceService  {
         this.coworkingSpaceRepository = coworkingSpaceRepository;
     }
 
-    public List<CoworkingSpace> getCoworkingSpaceByAddress(String address){
-      return  coworkingSpaceRepository.findCoworkingSpaceByAddressIgnoreCase(address);
-    }
 
     public CoworkingSpace getById(Long id){
         Optional<CoworkingSpace> coworkingSpaceOptional = coworkingSpaceRepository.findById(id);
@@ -33,8 +32,19 @@ public class CoworkingSpaceService  {
         coworkingSpaceRepository.deleteById(id);
     }
 
-    public List<CoworkingSpace> getCoworkingSpaces(){
-        return coworkingSpaceRepository.findAll();
+    public List<CoworkingSpace> getCoworkingSpaces(String address, String name){
+        if(StringUtils.isNotEmpty(address)){
+            return coworkingSpaceRepository.findCoworkingSpaceByAddressIgnoreCase(address);
+        }
+        if(StringUtils.isNotEmpty(name)){
+            return coworkingSpaceRepository.findCoworkingSpaceByNameIgnoreCase(name);
+        }
+        if(StringUtils.isNotEmpty(address) & StringUtils.isNoneEmpty(name)){
+            return coworkingSpaceRepository.findCoworkingSpaceByNameAndByAddressIgnoreCase(name, address);
+        } else {
+            return coworkingSpaceRepository.findAll();
+        }
+
     }
 
 
