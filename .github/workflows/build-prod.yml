@@ -45,12 +45,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Build docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: piinalpin/spacelabs-miniproject:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spacelabs-miniproject:latest
   deployment:
     name: Deploy container using SSH
     runs-on: ubuntu-18.04
@@ -75,6 +77,6 @@ jobs:
           username: ${{ secrets.EC2_SSH_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            docker rmi piinalpin/spacelabs-miniproject:latest
-            docker pull piinalpin/spacelabs-miniproject:latest
-            docker run -d --rm --name spacelabs-miniproject -p 80:8080 --env-file=dev.env --network rawlabs_space piinalpin/spacelabs-miniproject:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/spacelabs-miniproject:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/spacelabs-miniproject:latest
+            docker run -d --rm --name spacelabs-miniproject -p 80:8080 --env-file=dev.env --network rawlabs_space ${{ secrets.DOCKERHUB_USERNAME }}/spacelabs-miniproject:latest
