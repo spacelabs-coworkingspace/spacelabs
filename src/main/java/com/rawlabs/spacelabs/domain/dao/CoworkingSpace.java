@@ -1,6 +1,7 @@
 package com.rawlabs.spacelabs.domain.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,4 +52,8 @@ public class CoworkingSpace {
     @JsonIgnore
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="coworkingSpace")
     private List<Facility> facilities;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "coworkingSpace", cascade = CascadeType.ALL)
+    private List<Transaction> transaction;
 }

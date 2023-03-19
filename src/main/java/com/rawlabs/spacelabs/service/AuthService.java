@@ -4,8 +4,6 @@ import com.rawlabs.spacelabs.component.TokenProvider;
 import com.rawlabs.spacelabs.domain.dao.User;
 import com.rawlabs.spacelabs.domain.dto.LoginRequestDto;
 import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
-import com.rawlabs.spacelabs.domain.dto.RegisterRequestDto;
-import com.rawlabs.spacelabs.domain.dto.RegisterResponseDto;
 import com.rawlabs.spacelabs.exception.UnAuthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.rawlabs.spacelabs.domain.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,31 +10,28 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "coworking_space_galery")
-@SQLDelete(sql = "update coworking_space_galery set is_deleted = true where id = ?")
+@Table(name = "payment_method")
+@SQLDelete(sql = "update payment_method set is_deleted = true where id = ?")
 @Where(clause = "is_deleted = false")
-public class CoworkingSpaceGalery {
-
+public class PaymentMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "img_url", nullable = false)
-    private String img_url;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @ManyToOne
-    @Schema(
-            description = "Coworking Space",
-            requiredMode = Schema.RequiredMode.REQUIRED
-    )
-    private CoworkingSpace coworkingSpace;
+    @Column(name = "instuction")
+    private String instruction;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
+    private List<Transaction> transaction;
 }

@@ -1,5 +1,6 @@
 package com.rawlabs.spacelabs.domain.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +48,7 @@ public class User implements UserDetails {
 
     @Column(name = "password", nullable = false)
     private String password;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

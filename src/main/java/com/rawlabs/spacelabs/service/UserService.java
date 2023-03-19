@@ -1,5 +1,6 @@
 package com.rawlabs.spacelabs.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rawlabs.spacelabs.constant.ErrorCode;
 import com.rawlabs.spacelabs.domain.dao.User;
 import com.rawlabs.spacelabs.domain.dto.RegisterRequestDto;
@@ -50,7 +51,7 @@ public class UserService implements UserDetailsService {
         String username = principal.getName();
 
         User user = userRepository.findUserByUsername(username);
-        log.info("Get user from username", user);
+        log.info("Get user_id and name from username ", user.getId(),user.getFullName());
 
         return user;
     }

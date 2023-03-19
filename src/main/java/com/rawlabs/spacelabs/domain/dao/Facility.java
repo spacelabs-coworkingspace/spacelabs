@@ -19,8 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "coworking_space_facility")
-@SQLDelete(sql = "update facility set is_deleted = true where id = ?")
-@Where(clause = "is deleted = false")
+@SQLDelete(sql = "update coworking_space_facility set is_deleted = true where id = ?")
+@Where(clause = "is_deleted = false")
 public class Facility {
 
     @Id
@@ -36,7 +36,8 @@ public class Facility {
     @Column(name = "status", nullable = false)
     private String status;
 
-
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted;
     @ManyToOne
     @Schema(
             description = "Coworking Space",
