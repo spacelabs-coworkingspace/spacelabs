@@ -2,7 +2,10 @@
 
 import com.rawlabs.spacelabs.domain.dto.LoginRequestDto;
 import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
+import com.rawlabs.spacelabs.domain.dto.RegisterRequestDto;
+import com.rawlabs.spacelabs.domain.dto.RegisterResponseDto;
 import com.rawlabs.spacelabs.service.AuthService;
+import com.rawlabs.spacelabs.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,17 +17,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-<span class="fc" id="L17">@Slf4j</span>
+<span class="fc" id="L20">@Slf4j</span>
 @RestController
 @RequestMapping(value = &quot;/auth&quot;)
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @Autowired
-<span class="fc" id="L25">    public AuthController(AuthService authService) {</span>
-<span class="fc" id="L26">        this.authService = authService;</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L29">    public AuthController(AuthService authService, UserService userService) {</span>
+<span class="fc" id="L30">        this.authService = authService;</span>
+<span class="fc" id="L31">        this.userService = userService;</span>
+<span class="fc" id="L32">    }</span>
 
     @PostMapping(value = &quot;/login&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = &quot;Login&quot;)
@@ -32,7 +37,18 @@ public class AuthController {
             @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Success&quot;)
     })
     public LoginResponseDto login(@RequestBody LoginRequestDto request) {
-<span class="fc" id="L35">        return authService.doLogin(request);</span>
+<span class="fc" id="L40">        return authService.doLogin(request);</span>
+    }
+
+    @PostMapping(value = &quot;/register&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = &quot;register&quot;)
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Success&quot;)
+            }
+    )
+    public RegisterResponseDto register(@RequestBody RegisterRequestDto request){
+<span class="nc" id="L51">        return userService.doRegister(request);</span>
     }
 
 }

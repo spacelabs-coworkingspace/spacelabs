@@ -34,7 +34,7 @@ public class AuthService {
 
     public LoginResponseDto doLogin(LoginRequestDto request) {
 <span class="fc" id="L36">        log.info(&quot;Begin do login with request :: {}&quot;, request);</span>
-<span class="fc" id="L37">        User user = (User) userService.loadUserByUsername(request.getUsername());</span>
+<span class="fc" id="L37">        User user = (User) userService.loadUserByUsername(request.getEmail());</span>
 
 <span class="fc bfc" id="L39" title="All 2 branches covered.">        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {</span>
 <span class="fc" id="L40">            throw new UnAuthorizedException(&quot;Invalid username or password!&quot;);</span>
@@ -42,7 +42,7 @@ public class AuthService {
 
 <span class="fc" id="L43">        log.info(&quot;Create authentication context&quot;);</span>
 <span class="fc" id="L44">        final Authentication authentication = authenticationManager.authenticate(</span>
-<span class="fc" id="L45">                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())</span>
+<span class="fc" id="L45">                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())</span>
         );
 
 <span class="fc" id="L48">        SecurityContextHolder.getContext().setAuthentication(authentication);</span>
@@ -53,6 +53,7 @@ public class AuthService {
 <span class="fc" id="L53">                .expiresIn(tokenProvider.getExpirationDate(token))</span>
 <span class="fc" id="L54">                .build();</span>
     }
+
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

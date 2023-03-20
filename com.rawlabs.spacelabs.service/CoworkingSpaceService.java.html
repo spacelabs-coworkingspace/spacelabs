@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoworkingSpaceService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spacelabs</a> &gt; <a href="index.source.html" class="el_package">com.rawlabs.spacelabs.service</a> &gt; <span class="el_source">CoworkingSpaceService.java</span></div><h1>CoworkingSpaceService.java</h1><pre class="source lang-java linenums">package com.rawlabs.spacelabs.service;
+
+import com.rawlabs.spacelabs.domain.dao.CoworkingSpace;
+import com.rawlabs.spacelabs.repository.CoworkingSpaceRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+<span class="nc" id="L13">@Slf4j</span>
+@Service
+public class CoworkingSpaceService  {
+    private final CoworkingSpaceRepository coworkingSpaceRepository;
+
+    @Autowired
+<span class="nc" id="L19">    public CoworkingSpaceService(CoworkingSpaceRepository coworkingSpaceRepository) {</span>
+<span class="nc" id="L20">        this.coworkingSpaceRepository = coworkingSpaceRepository;</span>
+<span class="nc" id="L21">    }</span>
+
+
+    public CoworkingSpace getById(Long id){
+<span class="nc" id="L25">        Optional&lt;CoworkingSpace&gt; coworkingSpaceOptional = coworkingSpaceRepository.findById(id);</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (coworkingSpaceOptional.isEmpty()) return null;</span>
+<span class="nc" id="L27">        return coworkingSpaceOptional.get();</span>
+    }
+
+    public void deleteById (Long id){
+<span class="nc" id="L31">        coworkingSpaceRepository.deleteById(id);</span>
+<span class="nc" id="L32">    }</span>
+
+    public List&lt;CoworkingSpace&gt; getCoworkingSpaces(String address, String name){
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(address)){</span>
+<span class="nc" id="L36">            return coworkingSpaceRepository.findCoworkingSpaceByAddressIgnoreCase(address);</span>
+        }
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(name)){</span>
+<span class="nc" id="L39">            return coworkingSpaceRepository.findCoworkingSpaceByNameIgnoreCase(name);</span>
+        }
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(address) &amp; StringUtils.isNoneEmpty(name)){</span>
+<span class="nc" id="L42">            return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);</span>
+        } else {
+<span class="nc" id="L44">            return coworkingSpaceRepository.findAll();</span>
+        }
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
