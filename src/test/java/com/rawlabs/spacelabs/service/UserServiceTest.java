@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +24,9 @@ class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserService userService;
 
@@ -33,6 +37,7 @@ class UserServiceTest {
                         .username("any")
                         .password("password")
                 .build());
+        when(passwordEncoder.encode(any())).thenReturn("Encrpt password");
         User user = (User) userService.loadUserByUsername("any");
         assertNotNull(user);
         assertEquals(1L, user.getId());

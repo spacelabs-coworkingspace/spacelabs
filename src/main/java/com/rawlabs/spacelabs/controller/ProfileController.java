@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/profile")
@@ -35,7 +37,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    public UserDetails getProfile(HttpServletRequest request){
-        return userService.getProfile(request);
+    public UserDetails getProfile(Principal principal){
+        return userService.getProfile(principal);
     }
 }

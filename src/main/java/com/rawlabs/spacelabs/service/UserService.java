@@ -43,9 +43,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public UserDetails getProfile(HttpServletRequest request){
-        log.info("Begin get profile :: {}", request);
-        Principal principal = request.getUserPrincipal();
+    public UserDetails getProfile(Principal principal){
 
         log.info("get name from profile : " , principal.getName());
         String username = principal.getName();
