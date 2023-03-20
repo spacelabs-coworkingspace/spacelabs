@@ -12,5 +12,5 @@ public interface CoworkingSpaceRepository extends JpaRepository<CoworkingSpace, 
     List<CoworkingSpace> findCoworkingSpaceByAddressIgnoreCase(String address);
     List<CoworkingSpace> findCoworkingSpaceByNameIgnoreCase(String name);
 
-    List<CoworkingSpace> findCoworkingSpaceByNameAndByAddressIgnoreCase(String name, String address);
+    List<CoworkingSpace> findCoworkingSpaceByNameAndAddressIgnoreCase(String name, String address);
 }
