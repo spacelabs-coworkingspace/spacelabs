@@ -40,9 +40,10 @@ public class CoworkingSpaceService  {
         }
         if(StringUtils.isNotEmpty(address) & StringUtils.isNoneEmpty(name)){
             return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);
-        } else {
-            return coworkingSpaceRepository.findAll();
         }
+        
+        return coworkingSpaceRepository.findAll();
+
 
     }
 
