@@ -1,10 +1,7 @@
 package com.rawlabs.spacelabs.domain.dao;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -42,12 +39,15 @@ public class Transaction {
     private String status;
 
     @ManyToOne
+    @ToString.Exclude
     private Guest guest;
 
     @ManyToOne
+    @ToString.Exclude
     private PaymentMethod paymentMethod;
 
     @ManyToOne
+    @ToString.Exclude
     private CoworkingSpace coworkingSpace;
 
 }

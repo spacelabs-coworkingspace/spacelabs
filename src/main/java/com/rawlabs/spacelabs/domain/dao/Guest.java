@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -83,6 +80,7 @@ public class Guest {
     private Boolean isDeleted;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "guest", cascade = CascadeType.ALL)
     private List<Transaction> transaction;
 
