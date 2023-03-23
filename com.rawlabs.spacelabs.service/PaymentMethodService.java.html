@@ -20,33 +20,33 @@ public class PaymentMethodService {
     private final PaymentMethodRepository paymentMethodRepository;
 
     @Autowired
-<span class="nc" id="L23">    public PaymentMethodService(PaymentMethodRepository paymentMethodRepository) {</span>
-<span class="nc" id="L24">        this.paymentMethodRepository = paymentMethodRepository;</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L23">    public PaymentMethodService(PaymentMethodRepository paymentMethodRepository) {</span>
+<span class="fc" id="L24">        this.paymentMethodRepository = paymentMethodRepository;</span>
+<span class="fc" id="L25">    }</span>
 
     public PaymentMethodResponseDto findPaymentMethod(PaymentMethodRequestDto request) {
         try {
-<span class="nc" id="L29">            PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByNameIgnoreCase(request.getName());</span>
+<span class="fc" id="L29">            PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByNameIgnoreCase(request.getName());</span>
 
-<span class="nc bnc" id="L31" title="All 2 branches missed.">            if (paymentMethod == null) throw new SpaceLabsException(&quot;Payment method not found&quot;, ErrorCode.DATA_NOT_FOUND.name());</span>
-<span class="nc" id="L32">            return PaymentMethodResponseDto.builder()</span>
-<span class="nc" id="L33">                    .name(paymentMethod.getName())</span>
-<span class="nc" id="L34">                    .build();</span>
-<span class="nc" id="L35">        } catch (Exception e) {</span>
-<span class="nc" id="L36">            log.error(&quot;Happened error when get payment method by name. &quot;, e);</span>
-<span class="nc" id="L37">            throw e;</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            if (paymentMethod == null) throw new SpaceLabsException(&quot;Payment method not found&quot;, ErrorCode.DATA_NOT_FOUND.name());</span>
+<span class="fc" id="L32">            return PaymentMethodResponseDto.builder()</span>
+<span class="fc" id="L33">                    .name(paymentMethod.getName())</span>
+<span class="fc" id="L34">                    .build();</span>
+<span class="fc" id="L35">        } catch (Exception e) {</span>
+<span class="fc" id="L36">            log.error(&quot;Happened error when get payment method by name. &quot;, e);</span>
+<span class="fc" id="L37">            throw e;</span>
         }
     }
 
     public PaymentMethod getPaymentMethodById(Long id){
-<span class="nc" id="L42">        Optional&lt;PaymentMethod&gt; paymentMethodOptional = paymentMethodRepository.findById(id);</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">        if(paymentMethodOptional.isEmpty()) return null;</span>
-<span class="nc" id="L44">        return paymentMethodOptional.get();</span>
+<span class="fc" id="L42">        Optional&lt;PaymentMethod&gt; paymentMethodOptional = paymentMethodRepository.findById(id);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if(paymentMethodOptional.isEmpty()) return null;</span>
+<span class="fc" id="L44">        return paymentMethodOptional.get();</span>
     }
 
 
     public List&lt;PaymentMethod&gt; getPaymentMethods(){
-<span class="nc" id="L49">        return paymentMethodRepository.findAll();</span>
+<span class="fc" id="L49">        return paymentMethodRepository.findAll();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

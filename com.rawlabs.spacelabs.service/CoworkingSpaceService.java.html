@@ -16,33 +16,35 @@ public class CoworkingSpaceService  {
     private final CoworkingSpaceRepository coworkingSpaceRepository;
 
     @Autowired
-<span class="nc" id="L19">    public CoworkingSpaceService(CoworkingSpaceRepository coworkingSpaceRepository) {</span>
-<span class="nc" id="L20">        this.coworkingSpaceRepository = coworkingSpaceRepository;</span>
-<span class="nc" id="L21">    }</span>
+<span class="fc" id="L19">    public CoworkingSpaceService(CoworkingSpaceRepository coworkingSpaceRepository) {</span>
+<span class="fc" id="L20">        this.coworkingSpaceRepository = coworkingSpaceRepository;</span>
+<span class="fc" id="L21">    }</span>
 
 
     public CoworkingSpace getById(Long id){
-<span class="nc" id="L25">        Optional&lt;CoworkingSpace&gt; coworkingSpaceOptional = coworkingSpaceRepository.findById(id);</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (coworkingSpaceOptional.isEmpty()) return null;</span>
-<span class="nc" id="L27">        return coworkingSpaceOptional.get();</span>
+<span class="fc" id="L25">        Optional&lt;CoworkingSpace&gt; coworkingSpaceOptional = coworkingSpaceRepository.findById(id);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (coworkingSpaceOptional.isEmpty()) return null;</span>
+<span class="fc" id="L27">        return coworkingSpaceOptional.get();</span>
     }
 
     public void deleteById (Long id){
-<span class="nc" id="L31">        coworkingSpaceRepository.deleteById(id);</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L31">        coworkingSpaceRepository.deleteById(id);</span>
+<span class="fc" id="L32">    }</span>
 
     public List&lt;CoworkingSpace&gt; getCoworkingSpaces(String address, String name){
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(address)){</span>
-<span class="nc" id="L36">            return coworkingSpaceRepository.findCoworkingSpaceByAddressIgnoreCase(address);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if(StringUtils.isNotEmpty(address) &amp; StringUtils.isNoneEmpty(name)){</span>
+<span class="fc" id="L36">            return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);</span>
         }
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(name)){</span>
-<span class="nc" id="L39">            return coworkingSpaceRepository.findCoworkingSpaceByNameIgnoreCase(name);</span>
+
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if(StringUtils.isNotEmpty(address)){</span>
+<span class="fc" id="L40">            return coworkingSpaceRepository.findCoworkingSpaceByAddressIgnoreCase(address);</span>
         }
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(address) &amp; StringUtils.isNoneEmpty(name)){</span>
-<span class="nc" id="L42">            return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if(StringUtils.isNotEmpty(name)){</span>
+<span class="fc" id="L43">            return coworkingSpaceRepository.findCoworkingSpaceByNameIgnoreCase(name);</span>
         }
+
         
-<span class="nc" id="L45">        return coworkingSpaceRepository.findAll();</span>
+<span class="fc" id="L47">        return coworkingSpaceRepository.findAll();</span>
 
 
     }
