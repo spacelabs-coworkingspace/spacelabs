@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -45,14 +46,17 @@ public class CoworkingSpace {
     private String address;
 
     @JsonIgnore
+    @ToStringExclude
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="coworkingSpace")
     private List<CoworkingSpaceGalery> coworkingSpaceGaleries;
 
     @JsonIgnore
+    @ToStringExclude
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="coworkingSpace")
     private List<Facility> facilities;
 
     @JsonIgnore
+    @ToStringExclude
     @OneToMany(mappedBy = "coworkingSpace", cascade = CascadeType.ALL)
     private List<Transaction> transaction;
 }

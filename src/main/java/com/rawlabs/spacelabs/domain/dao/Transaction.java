@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "transaction")
 @SQLDelete(sql = "update transaction set is_deleted = true where id = ?")
-@Where(clause = "transaction = false")
+@Where(clause = "is_deleted = false")
 public class Transaction {
 
     @Id

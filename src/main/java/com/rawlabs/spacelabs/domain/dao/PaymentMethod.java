@@ -44,7 +44,7 @@ public class PaymentMethod {
     )
     private String instruction;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     @Schema(
             requiredMode = Schema.RequiredMode.REQUIRED,
             example = "false"
