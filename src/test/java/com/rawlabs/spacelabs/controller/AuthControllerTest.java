@@ -1,6 +1,7 @@
 package com.rawlabs.spacelabs.controller;
 
 import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
+import com.rawlabs.spacelabs.domain.dto.RegisterResponseDto;
 import com.rawlabs.spacelabs.service.AuthService;
 import com.rawlabs.spacelabs.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +74,21 @@ class AuthControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.accessToken").value("anyToken"))
                 .andExpect(jsonPath("$.expiresIn").isNotEmpty());
+    }
+
+    @Test
+    void register_Test() throws Exception{
+        when(userService.doRegister(any())).thenReturn(RegisterResponseDto.builder()
+                        .username("any username")
+                        .email("any email")
+                        .build());
+        mvc.perform(post("/auth/register")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.username").value("any username"))
+                .andExpect(jsonPath("$.email").value("any email"));
+
     }
 
 }
