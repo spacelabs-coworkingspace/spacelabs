@@ -37,11 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http, TokenProvider tokenProvider, UserRepository userRepository) throws Exception {
         http.httpBasic().and().cors().and().csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/auth/login", "/auth/register").permitAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(new JwtAuthenticationFilter(userDetailsService(userRepository), tokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(userDetailsService(userRepository, this.passwordEncoder() ), tokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -65,8 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return new UserService(userRepository);
+    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        return new UserService(userRepository, passwordEncoder);
     }
 
     @Bean
