@@ -3,7 +3,6 @@ package com.rawlabs.spacelabs.service;
 import com.rawlabs.spacelabs.constant.ErrorCode;
 import com.rawlabs.spacelabs.domain.dao.Guest;
 import com.rawlabs.spacelabs.domain.dto.GuestRequestDto;
-import com.rawlabs.spacelabs.domain.dto.GuestResponseDto;
 import com.rawlabs.spacelabs.exception.SpaceLabsException;
 import com.rawlabs.spacelabs.repository.GuestRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class GuestService {
         Guest guest;
 
         try {
-            guest = guestRepository.save(Guest.builder()
+            guest = Guest.builder()
                     .fullName(request.getFullName())
                     .phoneNumber(request.getPhoneNumber())
                     .email(request.getEmail())
@@ -34,8 +33,9 @@ public class GuestService {
                     .timeStart(request.getTimeStart())
                     .timeEnd(request.getTimeEnd())
                     .isDeleted(Boolean.FALSE)
-                    .build()
-            );
+                    .build();
+
+
 
             log.info("Register response :: ", guest.getId(), guest.getFullName());
         } catch (Exception e){
@@ -43,6 +43,8 @@ public class GuestService {
             throw new SpaceLabsException("Error Save Guest", ErrorCode.UNAUTHORIZED.name());
         }
 
-        return guest;
+
+
+        return  guestRepository.save(guest);
     }
 }

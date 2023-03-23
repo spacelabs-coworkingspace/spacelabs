@@ -41,7 +41,7 @@ public class CoworkingSpaceService  {
         if(StringUtils.isNotEmpty(address) & StringUtils.isNoneEmpty(name)){
             return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);
         }
-        
+
         return coworkingSpaceRepository.findAll();
 
 

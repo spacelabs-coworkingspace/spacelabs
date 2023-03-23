@@ -8,6 +8,7 @@ import com.rawlabs.spacelabs.repository.TransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
+
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -36,6 +38,9 @@ public class TransactionServiceTest {
 
     @MockBean
     private PaymentMethodService paymentMethodService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Test
     void inquiry_Success_Test(){
@@ -60,17 +65,35 @@ public class TransactionServiceTest {
                 .email("any mail")
                 .date(LocalDate.now())
                 .timeStart(LocalTime.now())
-                .timeEnd(LocalTime.now())
+                .timeEnd(LocalTime.now().plusHours(1))
                 .build());
 
         when(transactionRepository.save(any())).thenReturn(Transaction.builder()
                 .id(1L)
                 .createdDate(LocalDateTime.now())
                 .isDeleted(Boolean.FALSE)
-                .total(any())
-                .guest(any())
-                .status(any())
+                .total(12000)
+                .guest(Guest.builder().build())
+                .status("PENDING")
                 .build()
         );
+    }
+
+
+    @Test
+    void execute_Success_Test(){
+
+        when(transactionRepository.findById(any())).thenReturn(Optional.ofNullable(Transaction.builder()
+                        .id(1L)
+                .build()));
+        Transaction transcation = transactionService.getTransactionById(1l);
+
+       transcation.setStatus("PAID");
+       transcation.setModifiedDate(LocalDateTime.now());
+
+       when(transactionRepository.save(transcation)).thenReturn(Transaction.builder()
+                       .id(1L)
+                       .status(transcation.getStatus())
+               .build());
     }
 }

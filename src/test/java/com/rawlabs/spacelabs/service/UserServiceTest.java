@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -37,7 +39,7 @@ class UserServiceTest {
                         .username("any")
                         .password("password")
                 .build());
-        when(passwordEncoder.encode(any())).thenReturn("Encrpt password");
+        when(passwordEncoder.encode(any())).thenReturn("Encrypt password");
         User user = (User) userService.loadUserByUsername("any");
         assertNotNull(user);
         assertEquals(1L, user.getId());
@@ -49,6 +51,21 @@ class UserServiceTest {
     void loadUserByUsername_Exception_Test() {
         when(userRepository.findUserByUsername(any())).thenReturn(null);
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("any"));
+    }
+
+    @Test
+    void doRegister_Success_Test(){
+
+        when(userRepository.save(any())).thenReturn(User.builder()
+                .createdDate(LocalDateTime.now())
+                .isDeleted(Boolean.FALSE)
+                .username("any name")
+                .fullName(any())
+                .email("any email")
+                .password("password")
+                .build());
+        when(passwordEncoder.encode("password")).thenReturn("Encrypt password");
+
     }
 
 }
