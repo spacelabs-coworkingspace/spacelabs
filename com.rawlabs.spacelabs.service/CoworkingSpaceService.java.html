@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-<span class="nc" id="L13">@Slf4j</span>
+<span class="fc" id="L13">@Slf4j</span>
 @Service
 public class CoworkingSpaceService  {
     private final CoworkingSpaceRepository coworkingSpaceRepository;
@@ -40,9 +40,10 @@ public class CoworkingSpaceService  {
         }
 <span class="nc bnc" id="L41" title="All 2 branches missed.">        if(StringUtils.isNotEmpty(address) &amp; StringUtils.isNoneEmpty(name)){</span>
 <span class="nc" id="L42">            return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);</span>
-        } else {
-<span class="nc" id="L44">            return coworkingSpaceRepository.findAll();</span>
         }
+        
+<span class="nc" id="L45">        return coworkingSpaceRepository.findAll();</span>
+
 
     }
 

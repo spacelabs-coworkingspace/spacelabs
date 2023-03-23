@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spacelabs</a> &gt; <a href="index.source.html" class="el_package">com.rawlabs.spacelabs.service</a> &gt; <span class="el_source">TransactionService.java</span></div><h1>TransactionService.java</h1><pre class="source lang-java linenums">package com.rawlabs.spacelabs.service;
 
-import com.rawlabs.spacelabs.constant.ErrorCode;
 import com.rawlabs.spacelabs.domain.dao.CoworkingSpace;
 import com.rawlabs.spacelabs.domain.dao.Guest;
 import com.rawlabs.spacelabs.domain.dao.PaymentMethod;
 import com.rawlabs.spacelabs.domain.dao.Transaction;
-import com.rawlabs.spacelabs.domain.dto.TransactionRequestDto;
-import com.rawlabs.spacelabs.domain.dto.TransactionResponseDto;
+import com.rawlabs.spacelabs.domain.dto.TransactionExecuteDto;
+import com.rawlabs.spacelabs.domain.dto.TransactionInquiryDto;
 import com.rawlabs.spacelabs.exception.SpaceLabsException;
 import com.rawlabs.spacelabs.repository.TransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
-<span class="nc" id="L23">@Slf4j</span>
+import static com.rawlabs.spacelabs.constant.ErrorCode.DATA_NOT_FOUND;
+
+<span class="fc" id="L21">@Slf4j</span>
 @Service
 public class TransactionService {
     private final TransactionRepository transactionRepository;
@@ -30,104 +28,79 @@ public class TransactionService {
 
 
     @Autowired
-<span class="nc" id="L33">    public TransactionService(TransactionRepository transactionRepository, GuestService guestService, CoworkingSpaceService coworkingSpaceService, PaymentMethodService paymentMethodService) {</span>
-<span class="nc" id="L34">        this.transactionRepository = transactionRepository;</span>
-<span class="nc" id="L35">        this.guestService = guestService;</span>
-<span class="nc" id="L36">        this.coworkingSpaceService = coworkingSpaceService;</span>
-<span class="nc" id="L37">        this.paymentMethodService = paymentMethodService;</span>
-<span class="nc" id="L38">    }</span>
+<span class="fc" id="L31">    public TransactionService(TransactionRepository transactionRepository, GuestService guestService, CoworkingSpaceService coworkingSpaceService, PaymentMethodService paymentMethodService) {</span>
+<span class="fc" id="L32">        this.transactionRepository = transactionRepository;</span>
+<span class="fc" id="L33">        this.guestService = guestService;</span>
+<span class="fc" id="L34">        this.coworkingSpaceService = coworkingSpaceService;</span>
+<span class="fc" id="L35">        this.paymentMethodService = paymentMethodService;</span>
+<span class="fc" id="L36">    }</span>
 
-    public TransactionResponseDto inquiry (TransactionRequestDto request){
-        Guest guest;
-        Transaction transaction;
+    public Transaction inquiry(TransactionInquiryDto request) {
         try {
-<span class="nc" id="L44">            log.info(&quot;Begin Get coworking space by id :: {}&quot;, request.getCoworkingSpaceId());</span>
-<span class="nc" id="L45">            CoworkingSpace coworkingSpace = coworkingSpaceService.getById(request.getCoworkingSpaceId());</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">            if(coworkingSpace == null){</span>
-<span class="nc" id="L47">                throw new Exception();</span>
+<span class="fc" id="L40">            log.info(&quot;Begin Get coworking space by id :: {}&quot;, request.getCoworkingSpaceId());</span>
+<span class="fc" id="L41">            CoworkingSpace coworkingSpace = coworkingSpaceService.getById(request.getCoworkingSpaceId());</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (coworkingSpace == null) {</span>
+<span class="fc" id="L43">                throw new SpaceLabsException(&quot;Coworking space not found&quot;, DATA_NOT_FOUND.name());</span>
             }
-<span class="nc" id="L49">            log.info(&quot;Response get coworking space&quot;, coworkingSpace);</span>
+<span class="fc" id="L45">            log.info(&quot;Response get coworking space {}&quot;, coworkingSpace);</span>
 
-<span class="nc" id="L51">            log.info(&quot;Begin Get payment method by id :: {}&quot;, request.getPaymentMethodId());</span>
-<span class="nc" id="L52">            PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodById(request.getPaymentMethodId());</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">            if(paymentMethod == null){</span>
-<span class="nc" id="L54">                throw new Exception();</span>
+<span class="fc" id="L47">            log.info(&quot;Begin Get payment method by id :: {}&quot;, request.getPaymentMethodId());</span>
+<span class="fc" id="L48">            PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodById(request.getPaymentMethodId());</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (paymentMethod == null) {</span>
+<span class="fc" id="L50">                throw new SpaceLabsException(&quot;Payment method space not found&quot;, DATA_NOT_FOUND.name());</span>
             }
-<span class="nc" id="L56">            log.info(&quot;Response Get payment method by id&quot;, paymentMethod);</span>
+<span class="fc" id="L52">            log.info(&quot;Response Get payment method by id {}&quot;, paymentMethod);</span>
+
+<span class="fc" id="L54">            log.info(&quot;Begin save guest&quot;);</span>
+<span class="fc" id="L55">            Guest guest = guestService.saveGuest(request.getGuest());</span>
+<span class="fc" id="L56">            log.info(&quot;Response save guest :: {}&quot;, guest);</span>
 
 
-<span class="nc" id="L59">            log.info(&quot;Begin save guest&quot;);</span>
-<span class="nc" id="L60">            guest = guestService.saveGuest(request.getGuest());</span>
-<span class="nc" id="L61">            log.info(&quot;Response save guest&quot;, guest);</span>
+<span class="fc" id="L59">            long duration = Duration.between(guest.getTimeStart(), guest.getTimeEnd()).toHours();</span>
+<span class="fc" id="L60">            int total = coworkingSpace.getPrice() * (int) duration;</span>
+<span class="fc" id="L61">            log.info(&quot;Begin save transaction by guest&quot;);</span>
 
-
-<span class="nc" id="L64">            long duration = Duration.between(guest.getTimeStart(), guest.getTimeEnd()).toHours();</span>
-<span class="nc" id="L65">            int total = (int) (coworkingSpace.getPrice() * duration);</span>
-<span class="nc" id="L66">            log.info(&quot;Begin save transaction by guest&quot;);</span>
-
-<span class="nc" id="L68">            transaction = transactionRepository.save(Transaction.builder()</span>
-<span class="nc" id="L69">                    .createdDate(LocalDateTime.now())</span>
-<span class="nc" id="L70">                    .isDeleted(Boolean.FALSE)</span>
-<span class="nc" id="L71">                    .total(total)</span>
-<span class="nc" id="L72">                    .paymentMethod(paymentMethod)</span>
-<span class="nc" id="L73">                    .coworkingSpace(coworkingSpace)</span>
-<span class="nc" id="L74">                    .guest(guest)</span>
-<span class="nc" id="L75">                    .status(&quot;PENDING&quot;)</span>
-<span class="nc" id="L76">                    .build()</span>
+<span class="fc" id="L63">            Transaction transaction = transactionRepository.save(Transaction.builder()</span>
+<span class="fc" id="L64">                    .createdDate(LocalDateTime.now())</span>
+<span class="fc" id="L65">                    .isDeleted(Boolean.FALSE)</span>
+<span class="fc" id="L66">                    .total(total)</span>
+<span class="fc" id="L67">                    .paymentMethod(paymentMethod)</span>
+<span class="fc" id="L68">                    .coworkingSpace(coworkingSpace)</span>
+<span class="fc" id="L69">                    .guest(guest)</span>
+<span class="fc" id="L70">                    .status(&quot;PENDING&quot;)</span>
+<span class="fc" id="L71">                    .build()</span>
             );
-<span class="nc" id="L78">            log.info(&quot;Save transaction response :: &quot;, transaction);</span>
 
-<span class="nc" id="L80">        } catch (Exception e) {</span>
-<span class="nc" id="L81">            log.error(&quot;Error get paymnet method {}&quot;, e);</span>
-<span class="nc" id="L82">            throw new SpaceLabsException(&quot;Error :&quot;, ErrorCode.UNKNOWN_ERROR.name());</span>
-<span class="nc" id="L83">        }</span>
-
-
-<span class="nc" id="L86">        return TransactionResponseDto.builder()</span>
-<span class="nc" id="L87">                .transactionId(transaction.getId())</span>
-<span class="nc" id="L88">                .status(transaction.getStatus())</span>
-<span class="nc" id="L89">                .paymentMethodName(transaction.getPaymentMethod().getName())</span>
-<span class="nc" id="L90">                .build();</span>
+<span class="fc" id="L74">            log.info(&quot;Save transaction response :: {}&quot;, transaction);</span>
+<span class="fc" id="L75">            return transaction;</span>
+<span class="fc" id="L76">        } catch (Exception e) {</span>
+<span class="fc" id="L77">            log.error(&quot;Error get payment method &quot;, e);</span>
+<span class="fc" id="L78">            throw e;</span>
+        }
 
     }
 
-    public TransactionResponseDto execute(TransactionRequestDto request){
-
-<span class="nc" id="L96">        log.info(&quot;Begin get transaction by Id&quot;, request.getTransactionId());</span>
-
-        Transaction transaction;
-
+    public Transaction execute(TransactionExecuteDto request) {
         try {
-<span class="nc" id="L101">           transaction =  this.getTransactionById(request.getTransactionId());</span>
-<span class="nc" id="L102">            log.info(&quot;Response transaction by ID : &quot;, transaction);</span>
-<span class="nc" id="L103">        } catch (Exception e) {</span>
-<span class="nc" id="L104">            log.error(&quot;Error get transaction&quot;, e);</span>
-<span class="nc" id="L105">            throw new SpaceLabsException(&quot;Error get transcation&quot;, ErrorCode.DATA_NOT_FOUND.name());</span>
-<span class="nc" id="L106">        }</span>
+<span class="fc" id="L85">            log.info(&quot;Begin get transaction by Id :: {}&quot;, request.getTransactionId());</span>
 
-<span class="nc" id="L108">        log.info(&quot;Set status transaction to paid&quot;);</span>
+<span class="fc" id="L87">            Optional&lt;Transaction&gt; transactionOptional = transactionRepository.findById(request.getTransactionId());</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (transactionOptional.isEmpty()) throw new SpaceLabsException(&quot;Transaction not found&quot;, DATA_NOT_FOUND.name());</span>
 
-<span class="nc" id="L110">        transaction.setStatus(&quot;PAID&quot;);</span>
+<span class="fc" id="L90">            Transaction transaction = transactionOptional.get();</span>
+<span class="fc" id="L91">            log.info(&quot;Response transaction by ID : {}&quot;, transaction);</span>
 
-<span class="nc" id="L112">        transaction = transactionRepository.save(Transaction.builder()</span>
-<span class="nc" id="L113">                .status(transaction.getStatus())</span>
-<span class="nc" id="L114">                .modifiedDate(LocalDateTime.now())</span>
-<span class="nc" id="L115">                .build()</span>
-        );
+<span class="fc" id="L93">            log.info(&quot;Set status transaction to paid&quot;);</span>
+<span class="fc" id="L94">            transaction.setStatus(&quot;PAID&quot;);</span>
+<span class="fc" id="L95">            transaction.setModifiedDate(LocalDateTime.now());</span>
+<span class="fc" id="L96">            transaction = transactionRepository.save(transaction);</span>
 
-
-<span class="nc" id="L119">        return TransactionResponseDto.builder()</span>
-<span class="nc" id="L120">                .transactionId(transaction.getId())</span>
-<span class="nc" id="L121">                .status(transaction.getStatus())</span>
-<span class="nc" id="L122">                .paymentMethodName(transaction.getPaymentMethod().getName())</span>
-<span class="nc" id="L123">                .build();</span>
-
+<span class="fc" id="L98">            return transaction;</span>
+<span class="fc" id="L99">        } catch (Exception e) {</span>
+<span class="fc" id="L100">            log.error(&quot;Error get transaction&quot;, e);</span>
+<span class="fc" id="L101">            throw e;</span>
+        }
     }
 
-    public Transaction getTransactionById(Long id){
-<span class="nc" id="L128">        Optional&lt;Transaction&gt; transactionOptional = transactionRepository.findById(id);</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (transactionOptional.isEmpty()) return null;</span>
-<span class="nc" id="L130">        return transactionOptional.get();</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

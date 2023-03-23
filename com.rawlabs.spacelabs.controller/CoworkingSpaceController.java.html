@@ -32,8 +32,9 @@ public class CoworkingSpaceController {
                     @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Success&quot;)
             }
     )
-    public List&lt;CoworkingSpace&gt; getCworkingSpaces(@RequestParam(value = &quot;address&quot;, required = false) String address, @RequestParam(value = &quot;name&quot;, required = false) String name){
-<span class="nc" id="L36">        return coworkingSpaceService.getCoworkingSpaces(address, name);</span>
+    public List&lt;CoworkingSpace&gt; getCoworkingSpaces(@RequestParam(value = &quot;address&quot;, required = false) String address,
+                                                   @RequestParam(value = &quot;name&quot;, required = false) String name){
+<span class="nc" id="L37">        return coworkingSpaceService.getCoworkingSpaces(address, name);</span>
     }
 
 
@@ -43,7 +44,7 @@ public class CoworkingSpaceController {
             @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Success&quot;)
     })
     public CoworkingSpace getByID(@PathVariable(value = &quot;id&quot;) Long id){
-<span class="nc" id="L46">        return coworkingSpaceService.getById(id);</span>
+<span class="nc" id="L47">        return coworkingSpaceService.getById(id);</span>
     }
 
     @DeleteMapping(value = &quot;/{id}&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,8 +53,8 @@ public class CoworkingSpaceController {
             @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Success&quot;)
     })
     public void deleteCoworkingSpace(@PathVariable(value = &quot;id&quot;) Long id){
-<span class="nc" id="L55">        coworkingSpaceService.deleteById(id);</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L56">        coworkingSpaceService.deleteById(id);</span>
+<span class="nc" id="L57">    }</span>
 
 
 }

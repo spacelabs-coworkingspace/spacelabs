@@ -3,47 +3,46 @@
 import com.rawlabs.spacelabs.constant.ErrorCode;
 import com.rawlabs.spacelabs.domain.dao.Guest;
 import com.rawlabs.spacelabs.domain.dto.GuestRequestDto;
-import com.rawlabs.spacelabs.domain.dto.GuestResponseDto;
 import com.rawlabs.spacelabs.exception.SpaceLabsException;
 import com.rawlabs.spacelabs.repository.GuestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<span class="nc" id="L13">@Slf4j</span>
+<span class="fc" id="L12">@Slf4j</span>
 @Service
 public class GuestService {
     private final GuestRepository guestRepository;
 
     @Autowired
-<span class="nc" id="L19">    public GuestService(GuestRepository guestRepository) {</span>
-<span class="nc" id="L20">        this.guestRepository = guestRepository;</span>
-<span class="nc" id="L21">    }</span>
+<span class="nc" id="L18">    public GuestService(GuestRepository guestRepository) {</span>
+<span class="nc" id="L19">        this.guestRepository = guestRepository;</span>
+<span class="nc" id="L20">    }</span>
 
     public Guest saveGuest(GuestRequestDto request){
 
-<span class="nc" id="L25">        log.info(&quot;Begin do Save Guest with request :: {}&quot;, request);</span>
+<span class="nc" id="L24">        log.info(&quot;Begin do Save Guest with request :: {}&quot;, request);</span>
         Guest guest;
 
         try {
-<span class="nc" id="L29">            guest = guestRepository.save(Guest.builder()</span>
-<span class="nc" id="L30">                    .fullName(request.getFullName())</span>
-<span class="nc" id="L31">                    .phoneNumber(request.getPhoneNumber())</span>
-<span class="nc" id="L32">                    .email(request.getEmail())</span>
-<span class="nc" id="L33">                    .date(request.getDate())</span>
-<span class="nc" id="L34">                    .timeStart(request.getTimeStart())</span>
-<span class="nc" id="L35">                    .timeEnd(request.getTimeEnd())</span>
-<span class="nc" id="L36">                    .isDeleted(Boolean.FALSE)</span>
-<span class="nc" id="L37">                    .build()</span>
+<span class="nc" id="L28">            guest = guestRepository.save(Guest.builder()</span>
+<span class="nc" id="L29">                    .fullName(request.getFullName())</span>
+<span class="nc" id="L30">                    .phoneNumber(request.getPhoneNumber())</span>
+<span class="nc" id="L31">                    .email(request.getEmail())</span>
+<span class="nc" id="L32">                    .date(request.getDate())</span>
+<span class="nc" id="L33">                    .timeStart(request.getTimeStart())</span>
+<span class="nc" id="L34">                    .timeEnd(request.getTimeEnd())</span>
+<span class="nc" id="L35">                    .isDeleted(Boolean.FALSE)</span>
+<span class="nc" id="L36">                    .build()</span>
             );
 
-<span class="nc" id="L40">            log.info(&quot;Register response :: &quot;, guest.getId(), guest.getFullName());</span>
-<span class="nc" id="L41">        } catch (Exception e){</span>
-<span class="nc" id="L42">            log.error(&quot;Error Save Guest {}&quot;, e);</span>
-<span class="nc" id="L43">            throw new SpaceLabsException(&quot;Error Save Guest&quot;, ErrorCode.UNAUTHORIZED.name());</span>
-<span class="nc" id="L44">        }</span>
+<span class="nc" id="L39">            log.info(&quot;Register response :: {} {}&quot;, guest.getId(), guest.getFullName());</span>
+<span class="nc" id="L40">        } catch (Exception e){</span>
+<span class="nc" id="L41">            log.error(&quot;Error save guest &quot;, e);</span>
+<span class="nc" id="L42">            throw new SpaceLabsException(&quot;Error Save Guest&quot;, ErrorCode.UNAUTHORIZED.name());</span>
+<span class="nc" id="L43">        }</span>
 
-<span class="nc" id="L46">        return guest;</span>
+<span class="nc" id="L45">        return guest;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
