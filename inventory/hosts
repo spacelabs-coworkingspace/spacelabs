@@ -8,4 +8,4 @@ postgres_db_name=rawlabs_space
 default_docker_network=rawlabs_space
 
 [all]
-aws_ec2 ansible_ssh_host=ec2-54-157-130-135.compute-1.amazonaws.com ansible_ssh_port=22 ansible_user=ec2-user ansible_ssh_private_key_file=./rawlabs-space.pem
+aws_ec2 ansible_ssh_host=ec2-34-206-72-188.compute-1.amazonaws.com ansible_ssh_port=22 ansible_user=ec2-user ansible_ssh_private_key_file=./rawlabs-space.pem
