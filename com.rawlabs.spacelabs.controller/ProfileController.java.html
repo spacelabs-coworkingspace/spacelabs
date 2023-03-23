@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-<span class="nc" id="L18">@Slf4j</span>
+<span class="fc" id="L18">@Slf4j</span>
 @RestController
 @RequestMapping(value = &quot;/profile&quot;)
 @SecurityRequirement(name = &quot;bearer&quot;)
@@ -24,9 +24,9 @@ public class ProfileController {
     private final UserService userService;
 
     @Autowired
-<span class="nc" id="L27">    public ProfileController(UserService userService) {</span>
-<span class="nc" id="L28">        this.userService = userService;</span>
-<span class="nc" id="L29">    }</span>
+<span class="fc" id="L27">    public ProfileController(UserService userService) {</span>
+<span class="fc" id="L28">        this.userService = userService;</span>
+<span class="fc" id="L29">    }</span>
 
     @GetMapping(value = &quot;&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = &quot;Get profile login user&quot;)
@@ -36,7 +36,7 @@ public class ProfileController {
             }
     )
     public User getProfile(Principal principal){
-<span class="nc" id="L39">        return userService.getProfile(principal);</span>
+<span class="fc" id="L39">        return userService.getProfile(principal);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

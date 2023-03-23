@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-<span class="nc" id="L18">@Slf4j</span>
+<span class="fc" id="L18">@Slf4j</span>
 @RestController
 @RequestMapping(value = &quot;/book&quot;)
 @SecurityRequirement(name = &quot;bearer&quot;)
 public class BookingController {
     private final TransactionService transactionService;
 
-<span class="nc" id="L25">    public BookingController(TransactionService transactionService) {</span>
-<span class="nc" id="L26">        this.transactionService = transactionService;</span>
-<span class="nc" id="L27">    }</span>
+<span class="fc" id="L25">    public BookingController(TransactionService transactionService) {</span>
+<span class="fc" id="L26">        this.transactionService = transactionService;</span>
+<span class="fc" id="L27">    }</span>
 
     @PostMapping(value = &quot;/inquiry&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = &quot;inquiry booking&quot;)
@@ -34,7 +34,7 @@ public class BookingController {
             }
     )
     public Transaction inquiry(@RequestBody TransactionInquiryDto request){
-<span class="nc" id="L37">        return transactionService.inquiry(request);</span>
+<span class="fc" id="L37">        return transactionService.inquiry(request);</span>
     }
 
     @PostMapping(value = &quot;/execute&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +45,7 @@ public class BookingController {
             }
     )
     public Transaction execute(@RequestBody TransactionExecuteDto request){
-<span class="nc" id="L48">        return transactionService.execute(request);</span>
+<span class="fc" id="L48">        return transactionService.execute(request);</span>
     }
 
 }
