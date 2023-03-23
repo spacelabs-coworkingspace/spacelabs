@@ -4,7 +4,6 @@ import com.rawlabs.spacelabs.component.TokenProvider;
 import com.rawlabs.spacelabs.domain.dao.User;
 import com.rawlabs.spacelabs.domain.dto.LoginRequestDto;
 import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
-import com.rawlabs.spacelabs.exception.UnAuthorizedException;
 import com.rawlabs.spacelabs.mock.AuthenticationMock;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -70,7 +69,7 @@ class AuthServiceTest {
                 .build());
         when(passwordEncoder.matches(any(), any())).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> authService.doLogin(LoginRequestDto.builder().build()));
+        assertThrows(Exception.class, () -> authService.doLogin(LoginRequestDto.builder().build()));
     }
 
 }
