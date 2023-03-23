@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 public class TransactionInquiryDto {
 
     @Schema(
-            requiredMode = Schema.RequiredMode.REQUIRED,
-            example = "Guest"
+            requiredMode = Schema.RequiredMode.REQUIRED
     )
     private GuestRequestDto guest;
 

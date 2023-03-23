@@ -32,15 +32,17 @@ public class CoworkingSpaceService  {
     }
 
     public List<CoworkingSpace> getCoworkingSpaces(String address, String name){
+        if(StringUtils.isNotEmpty(address) & StringUtils.isNoneEmpty(name)){
+            return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);
+        }
+
         if(StringUtils.isNotEmpty(address)){
             return coworkingSpaceRepository.findCoworkingSpaceByAddressIgnoreCase(address);
         }
         if(StringUtils.isNotEmpty(name)){
             return coworkingSpaceRepository.findCoworkingSpaceByNameIgnoreCase(name);
         }
-        if(StringUtils.isNotEmpty(address) & StringUtils.isNoneEmpty(name)){
-            return coworkingSpaceRepository.findCoworkingSpaceByNameAndAddressIgnoreCase(name, address);
-        }
+
         
         return coworkingSpaceRepository.findAll();
 

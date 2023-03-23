@@ -2,10 +2,7 @@ package com.rawlabs.spacelabs.domain.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -45,14 +42,17 @@ public class CoworkingSpace {
     private String address;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="coworkingSpace")
     private List<CoworkingSpaceGalery> coworkingSpaceGaleries;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="coworkingSpace")
     private List<Facility> facilities;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "coworkingSpace", cascade = CascadeType.ALL)
     private List<Transaction> transaction;
 }
