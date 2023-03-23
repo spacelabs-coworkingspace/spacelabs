@@ -23,7 +23,8 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private Long transactionId;
 
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
@@ -48,7 +49,5 @@ public class Transaction {
 
     @ManyToOne
     private CoworkingSpace coworkingSpace;
-
-
 
 }

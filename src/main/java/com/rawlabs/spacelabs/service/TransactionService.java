@@ -1,24 +1,22 @@
 package com.rawlabs.spacelabs.service;
 
-import com.rawlabs.spacelabs.constant.ErrorCode;
 import com.rawlabs.spacelabs.domain.dao.CoworkingSpace;
 import com.rawlabs.spacelabs.domain.dao.Guest;
 import com.rawlabs.spacelabs.domain.dao.PaymentMethod;
 import com.rawlabs.spacelabs.domain.dao.Transaction;
-import com.rawlabs.spacelabs.domain.dto.TransactionRequestDto;
-import com.rawlabs.spacelabs.domain.dto.TransactionResponseDto;
+import com.rawlabs.spacelabs.domain.dto.TransactionExecuteDto;
+import com.rawlabs.spacelabs.domain.dto.TransactionInquiryDto;
 import com.rawlabs.spacelabs.exception.SpaceLabsException;
 import com.rawlabs.spacelabs.repository.TransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
+
+import static com.rawlabs.spacelabs.constant.ErrorCode.DATA_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -37,35 +35,32 @@ public class TransactionService {
         this.paymentMethodService = paymentMethodService;
     }
 
-    public TransactionResponseDto inquiry (TransactionRequestDto request){
-        Guest guest;
-        Transaction transaction;
+    public Transaction inquiry(TransactionInquiryDto request) {
         try {
             log.info("Begin Get coworking space by id :: {}", request.getCoworkingSpaceId());
             CoworkingSpace coworkingSpace = coworkingSpaceService.getById(request.getCoworkingSpaceId());
-            if(coworkingSpace == null){
-                throw new Exception();
+            if (coworkingSpace == null) {
+                throw new SpaceLabsException("Coworking space not found", DATA_NOT_FOUND.name());
             }
-            log.info("Response get coworking space", coworkingSpace);
+            log.info("Response get coworking space {}", coworkingSpace);
 
             log.info("Begin Get payment method by id :: {}", request.getPaymentMethodId());
             PaymentMethod paymentMethod = paymentMethodService.getPaymentMethodById(request.getPaymentMethodId());
-            if(paymentMethod == null){
-                throw new Exception();
+            if (paymentMethod == null) {
+                throw new SpaceLabsException("Payment method space not found", DATA_NOT_FOUND.name());
             }
-            log.info("Response Get payment method by id", paymentMethod);
-
+            log.info("Response Get payment method by id {}", paymentMethod);
 
             log.info("Begin save guest");
-            guest = guestService.saveGuest(request.getGuest());
-            log.info("Response save guest", guest);
+            Guest guest = guestService.saveGuest(request.getGuest());
+            log.info("Response save guest :: {}", guest);
 
 
             long duration = Duration.between(guest.getTimeStart(), guest.getTimeEnd()).toHours();
-            int total = (int) (coworkingSpace.getPrice() * duration);
+            int total = coworkingSpace.getPrice() * (int) duration;
             log.info("Begin save transaction by guest");
 
-            transaction = transactionRepository.save(Transaction.builder()
+            Transaction transaction = transactionRepository.save(Transaction.builder()
                     .createdDate(LocalDateTime.now())
                     .isDeleted(Boolean.FALSE)
                     .total(total)
@@ -75,58 +70,36 @@ public class TransactionService {
                     .status("PENDING")
                     .build()
             );
-            log.info("Save transaction response :: ", transaction);
 
+            log.info("Save transaction response :: {}", transaction);
+            return transaction;
         } catch (Exception e) {
-            log.error("Error get paymnet method {}", e);
-            throw new SpaceLabsException("Error :", ErrorCode.UNKNOWN_ERROR.name());
+            log.error("Error get payment method ", e);
+            throw e;
         }
-
-
-        return TransactionResponseDto.builder()
-                .transactionId(transaction.getId())
-                .status(transaction.getStatus())
-                .paymentMethodName(transaction.getPaymentMethod().getName())
-                .build();
 
     }
 
-    public TransactionResponseDto execute(TransactionRequestDto request){
-
-        log.info("Begin get transaction by Id", request.getTransactionId());
-
-        Transaction transaction;
-
+    public Transaction execute(TransactionExecuteDto request) {
         try {
-           transaction =  this.getTransactionById(request.getTransactionId());
-            log.info("Response transaction by ID : ", transaction);
+            log.info("Begin get transaction by Id :: {}", request.getTransactionId());
+
+            Optional<Transaction> transactionOptional = transactionRepository.findById(request.getTransactionId());
+            if (transactionOptional.isEmpty()) throw new SpaceLabsException("Transaction not found", DATA_NOT_FOUND.name());
+
+            Transaction transaction = transactionOptional.get();
+            log.info("Response transaction by ID : {}", transaction);
+
+            log.info("Set status transaction to paid");
+            transaction.setStatus("PAID");
+            transaction.setModifiedDate(LocalDateTime.now());
+            transaction = transactionRepository.save(transaction);
+
+            return transaction;
         } catch (Exception e) {
             log.error("Error get transaction", e);
-            throw new SpaceLabsException("Error get transcation", ErrorCode.DATA_NOT_FOUND.name());
+            throw e;
         }
-
-        log.info("Set status transaction to paid");
-
-        transaction.setStatus("PAID");
-
-        transaction = transactionRepository.save(Transaction.builder()
-                .status(transaction.getStatus())
-                .modifiedDate(LocalDateTime.now())
-                .build()
-        );
-
-
-        return TransactionResponseDto.builder()
-                .transactionId(transaction.getId())
-                .status(transaction.getStatus())
-                .paymentMethodName(transaction.getPaymentMethod().getName())
-                .build();
-
     }
 
-    public Transaction getTransactionById(Long id){
-        Optional<Transaction> transactionOptional = transactionRepository.findById(id);
-        if (transactionOptional.isEmpty()) return null;
-        return transactionOptional.get();
-    }
 }

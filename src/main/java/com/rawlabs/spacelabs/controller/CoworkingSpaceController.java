@@ -32,7 +32,8 @@ public class CoworkingSpaceController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    public List<CoworkingSpace> getCworkingSpaces(@RequestParam(value = "address", required = false) String address, @RequestParam(value = "name", required = false) String name){
+    public List<CoworkingSpace> getCoworkingSpaces(@RequestParam(value = "address", required = false) String address,
+                                                   @RequestParam(value = "name", required = false) String name){
         return coworkingSpaceService.getCoworkingSpaces(address, name);
     }
 

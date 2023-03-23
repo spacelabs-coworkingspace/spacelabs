@@ -1,7 +1,5 @@
 package com.rawlabs.spacelabs.domain.dto;
 
-import com.rawlabs.spacelabs.domain.dao.CoworkingSpace;
-import com.rawlabs.spacelabs.service.CoworkingSpaceService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionRequestDto {
+public class TransactionInquiryDto {
 
     @Schema(
             requiredMode = Schema.RequiredMode.REQUIRED,
@@ -31,13 +29,5 @@ public class TransactionRequestDto {
             example = "1"
     )
     private Long coworkingSpaceId;
-
-    @Schema(
-            requiredMode = Schema.RequiredMode.REQUIRED,
-            example = "1"
-    )
-    private Long transactionId;
-
-
 
 }

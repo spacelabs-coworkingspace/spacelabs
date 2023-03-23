@@ -1,16 +1,14 @@
 package com.rawlabs.spacelabs.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rawlabs.spacelabs.domain.dao.User;
 import com.rawlabs.spacelabs.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +35,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    public UserDetails getProfile(Principal principal){
+    public User getProfile(Principal principal){
         return userService.getProfile(principal);
     }
 }

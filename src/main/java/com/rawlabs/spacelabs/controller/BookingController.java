@@ -1,7 +1,8 @@
 package com.rawlabs.spacelabs.controller;
 
-import com.rawlabs.spacelabs.domain.dto.TransactionRequestDto;
-import com.rawlabs.spacelabs.domain.dto.TransactionResponseDto;
+import com.rawlabs.spacelabs.domain.dao.Transaction;
+import com.rawlabs.spacelabs.domain.dto.TransactionExecuteDto;
+import com.rawlabs.spacelabs.domain.dto.TransactionInquiryDto;
 import com.rawlabs.spacelabs.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +33,7 @@ public class BookingController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    public TransactionResponseDto inquiry(@RequestBody TransactionRequestDto request){
+    public Transaction inquiry(@RequestBody TransactionInquiryDto request){
         return transactionService.inquiry(request);
     }
 
@@ -43,8 +44,8 @@ public class BookingController {
                     @ApiResponse(responseCode = "200", description = "Success")
             }
     )
-    public TransactionResponseDto execute(@RequestBody TransactionRequestDto requst){
-        return transactionService.execute(requst);
+    public Transaction execute(@RequestBody TransactionExecuteDto request){
+        return transactionService.execute(request);
     }
 
 }

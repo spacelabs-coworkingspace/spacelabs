@@ -24,20 +24,18 @@ public class PaymentMethodService {
         this.paymentMethodRepository = paymentMethodRepository;
     }
 
-    public PaymentMethodResponseDto findPaymentMethod(PaymentMethodRequestDto requst) {
-        PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByNameIgnoreCase(requst.getName());
+    public PaymentMethodResponseDto findPaymentMethod(PaymentMethodRequestDto request) {
+        try {
+            PaymentMethod paymentMethod = paymentMethodRepository.findPaymentMethodByNameIgnoreCase(request.getName());
 
-        if(paymentMethod == null){
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                throw new SpaceLabsException("Error find payment : ", ErrorCode.DATA_NOT_FOUND.name());
-            }
+            if (paymentMethod == null) throw new SpaceLabsException("Payment method not found", ErrorCode.DATA_NOT_FOUND.name());
+            return PaymentMethodResponseDto.builder()
+                    .name(paymentMethod.getName())
+                    .build();
+        } catch (Exception e) {
+            log.error("Happened error when get payment method by name. ", e);
+            throw e;
         }
-
-        return PaymentMethodResponseDto.builder()
-                .name(paymentMethod.getName())
-                .build();
     }
 
     public PaymentMethod getPaymentMethodById(Long id){

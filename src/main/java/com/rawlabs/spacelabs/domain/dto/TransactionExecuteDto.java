@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDto {
+public class TransactionExecuteDto {
 
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "johndhoe@mail.com")
-    private String email;
-
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "password")
-    private String password;
+    @Schema(
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            example = "1"
+    )
+    private Long transactionId;
 
 }
