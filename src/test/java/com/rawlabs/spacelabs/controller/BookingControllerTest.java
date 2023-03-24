@@ -1,9 +1,7 @@
 package com.rawlabs.spacelabs.controller;
 
-import com.rawlabs.spacelabs.domain.dto.LoginResponseDto;
-import com.rawlabs.spacelabs.domain.dto.RegisterResponseDto;
-import com.rawlabs.spacelabs.service.AuthService;
-import com.rawlabs.spacelabs.service.UserService;
+import com.rawlabs.spacelabs.domain.dao.Transaction;
+import com.rawlabs.spacelabs.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,33 +19,26 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.time.LocalDateTime;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @Slf4j
 @ContextConfiguration
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
-class AuthControllerTest {
+class BookingControllerTest {
 
     @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private UserService userService;
-
+    private TransactionService transactionService;
     @Autowired
     private WebApplicationContext context;
-
     private MockMvc mvc;
 
     @BeforeEach
-    public void setup() {
+    public void setup(){
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
@@ -55,40 +46,43 @@ class AuthControllerTest {
 
     @Configuration
     @EnableWebMvc
-    static class AuthControllerTestConfig {
+    static class BookingControllerTestConfig{
         @Bean
-        public AuthController authController(AuthService authService, UserService userService) {
-            return new AuthController(authService, userService);
+        public BookingController bookingController(TransactionService transactionService){
+            return new BookingController(transactionService);
         }
     }
 
     @Test
-    void login_Test() throws Exception {
-        when(authService.doLogin(any())).thenReturn(LoginResponseDto.builder()
-                        .accessToken("anyToken")
-                        .expiresIn(LocalDateTime.now())
-                .build());
-        mvc.perform(post("/auth/login")
-                        .content("{}")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.accessToken").value("anyToken"))
-                .andExpect(jsonPath("$.expiresIn").isNotEmpty());
-    }
-
-    @Test
-    void register_Test() throws Exception{
-        when(userService.doRegister(any())).thenReturn(RegisterResponseDto.builder()
-                        .username("any username")
-                        .email("any email")
-                        .build());
-        mvc.perform(post("/auth/register")
+    void inquiry_Test() throws Exception {
+        when(transactionService.inquiry(any())).thenReturn(
+                Transaction.builder()
+                        .transactionId(1L)
+                        .status("PENDING")
+                        .build()
+        );
+        mvc.perform(post("/book/inquiry")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.username").value("any username"))
-                .andExpect(jsonPath("$.email").value("any email"));
+                .andExpect(jsonPath("$.transactionId").value(1L))
+                .andExpect(jsonPath("$.status").value("PENDING"));
+    }
 
+    @Test
+    void execute_Test() throws Exception {
+        when(transactionService.execute(any())).thenReturn(
+                Transaction.builder()
+                        .transactionId(1L)
+                        .status("PAID")
+                        .build()
+        );
+        mvc.perform(post("/book/execute")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.transactionId").value(1L))
+                .andExpect(jsonPath("$.status").value("PAID"));
     }
 
 }
